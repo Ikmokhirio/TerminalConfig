@@ -7,7 +7,7 @@
 2) Добавить шрифт необходимо в `Settings->Appearence`
 3) Запустить из poweshell `install.ps1`
 
-### Установка в linu
+### Установка в linux
 1) Подробности есть на сайте [Oh My Posh](https://ohmyposh.dev/)
 2) Добавить в конец `.profile` файла в домашней директории `eval "$(oh-my-posh --init --shell bash --config ~/.poshthemes/atomic.omp.json)"`
 
