@@ -1,0 +1,22 @@
+{
+    "languageserver": {
+    "ccls": {
+      "command": "ccls",
+      "args": ["--log-file=W:/BuildTools/ccls-tmp-files/log/ccls.log", "-v=1"],
+      "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"],
+      "rootPatterns": [".ccls", "compile_commands.json", ".git/"],
+      "initializationOptions": {
+         "cache": {
+           "directory": "W:/BuildTools/ccls-tmp-files/cache"
+         },
+         "client": {
+          "snippetSupport": true
+         },
+         "index": {
+          "onChange": true
+        },
+         "highlight": { "lsRanges" : true }
+       }
+    }
+  }
+}

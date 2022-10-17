@@ -1,0 +1,1 @@
+winget install Neovim.Neovim

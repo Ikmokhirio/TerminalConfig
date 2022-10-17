@@ -20,5 +20,8 @@ Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
         }
 }
 
+Set-Alias which where.exe
+
 oh-my-posh init pwsh --config ~/posh_config/atomic.omp.json | Invoke-Expression
+
 
