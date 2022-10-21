@@ -6,13 +6,14 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-Plug 'rhysd/vim-c-format'
+Plug 'rhysd/vim-clang-format'
 
 Plug 'preservim/nerdtree'
 
 Plug 'mfussenegger/nvim-dap'
 
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+Plug 'cdelledonne/vim-cmake'
 call plug#end()
 
 " Some servers have issues with backup files, see #649.
@@ -142,7 +143,7 @@ dap.configurations.cpp = {
       return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
     end,
     cwd = '${workspaceFolder}',
-    stopOnEntry = true,
+    stopOnEntry = false,
     args = {},
   },
 }
@@ -150,6 +151,7 @@ dap.configurations.cpp = {
 dap.configurations.c = dap.configurations.cpp
 vim.fn.sign_define('DapBreakpoint', {text='🔴', texthl='', linehl='', numhl=''})
 vim.fn.sign_define('DapStopped', {text='🟢', texthl='', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpointRejected', {text='❌', texthl='', linehl='', numhl=''})
 EOF
 
 "Example at https://github.com/David-Kunz/vim/blob/master/init.lua
@@ -157,16 +159,22 @@ nnoremap <F9> :lua require('dap').continue()<CR>
 nnoremap <F7> :lua require('dap').step_into()<CR>
 nnoremap <F8> :lua require('dap').step_over()<CR>
 nnoremap <leader>br :lua require('dap').toggle_breakpoint()<CR>
+nnoremap <leader>brl :lua require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
 nnoremap <silent> <Leader>dr :lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l
 
-nnoremap <leader>di :lua local widgets=require'dap.ui.widgets';widgets.centered_float(widgets.scopes)<CR>
+nnoremap <leader>di :lua local widgets=require'dap.ui.widgets';widgets.sidebar(widgets.scopes).open()<CR>
 vnoremap <leader>di :lua require"dap.ui.widgets".hover()<CR>
 
-"BUILD WINDOWS
-nnoremap <leader>d86 :call system('cmake -E env CMAKE_EXE_LINKER_FLAGS=/machine:x86 cmake -G Ninja -S . -B build_x86_debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug')<CR>
-nnoremap <leader>d64 :call system('cmake -E env CMAKE_EXE_LINKER_FLAGS=/machine:x64 cmake -G Ninja -S . -B build_x64_debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug')<CR>
-nnoremap <leader>r86 :call system('cmake -E env CMAKE_EXE_LINKER_FLAGS=/machine:x86 cmake -G Ninja -S . -B build_x86_release -DCMAKE_BUILD_TYPE=Release')<CR>
-nnoremap <leader>r64 :call system('cmake -E env CMAKE_EXE_LINKER_FLAGS=/machine:x64 cmake -G Ninja -S . -B build_x64_release -DCMAKE_BUILD_TYPE=Release')<CR>
+
+" CMAKE CONFIG
+let g:cmake_command = 'cmake'
+let g:cmake_default_config = 'Debug'
+let g:cmake_generate_options = ['-DCMAKE_EXPORT_COMPILE_COMMANDS=ON','-G Ninja']
+let g:cmake_root_markers = ['.git', '.svn', '.clang-format']
+set statusline=%{cmake#GetInfo().cmake_version.string}
+
+nmap <c-f5> <Plug>(CMakeBuildTarget)
+nmap <f5> <Plug>(CMakeBuild)
 
 "Terminal
 lua << EOF

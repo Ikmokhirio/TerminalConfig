@@ -178,9 +178,14 @@ nnoremap <c-b> <Esc>:NERDTreeToggle<cr>
 В llvm-project есть дебаггер. Собственно LLDB
 
 ```
-cmake -G Ninja -DLLVM_ENABLE_PROJECTS="clang;lldb" [<cmake options>] path/to/llvm-project/llvm
-ninja lldb
+cmake -G Ninja -DLLVM_ENABLE_PROJECTS="clang;lldb;lld;tools" -BRelease -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl llvm
+ninja -C Release lldb
 ```
+
+Конкретно юзается lldb-vscode
+
+Для него нужен плагин nvim.dap
+Спасибо [этому парню](https://www.youtube.com/watch?v=ga3Cas7vNCk&t=5s) за видос <3
 
 ## Билд C/C++ программ
 При условии, что настроен developer powershell
@@ -199,6 +204,6 @@ Ninja использует для выбора архитектуры (x64,x86) 
 Флаг описан у [майков](https://learn.microsoft.com/en-us/cpp/build/how-to-configure-visual-cpp-projects-to-target-64-bit-platforms?redirectedfrom=MSDN&view=msvc-160)
 Или же использовать как переменные среды
 ```
-cmake -E env CMAKE_EXE_LINKER_FLAGS=/machine:x64 cmake -G Ninja -S sourceDir -B buildDir -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug
+cmake -E env CMAKE_EXE_LINKER_FLAGS=/machine:x64 cmake -G Ninja -S . -B build64Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug
 ```
 
